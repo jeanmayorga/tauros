@@ -1,0 +1,10 @@
+body {
+  background: #0e0e0e;
+}
+
+.home-cover {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  vertical-align: top;
+}
