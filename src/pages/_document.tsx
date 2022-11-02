@@ -2,6 +2,7 @@ import * as React from "react";
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import createEmotionServer from "@emotion/server/create-instance";
 import { theme, createEmotionCache } from "../config";
+import { Box } from "@mui/material";
 
 export default class MyDocument extends Document {
   render() {
@@ -9,19 +10,26 @@ export default class MyDocument extends Document {
       <Html lang="en">
         <Head>
           {/* PWA primary color */}
-          <meta name="theme-color" content={theme.palette.primary.main} />
+          <meta name="theme-color" content="#151412" />
           <link rel="shortcut icon" href="/favicon.ico" />
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
+          <link rel="manifest" href="/manifest.json" />
           <meta name="emotion-insertion-point" content="" />
           {(this.props as any).emotionStyleTags}
         </Head>
-        <body>
+        <Box
+          bgcolor={{ xs: "#151412", sm: "#0e0e0e" }}
+          component="body"
+          display={{ xs: "block", sm: "flex" }}
+          alignItems="center"
+          justifyContent="center"
+        >
           <Main />
           <NextScript />
-        </body>
+        </Box>
       </Html>
     );
   }

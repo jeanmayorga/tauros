@@ -1,5 +1,7 @@
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { supabase } from "../lib";
 
 type AuthForm = {
   email: string;
@@ -7,12 +9,38 @@ type AuthForm = {
 };
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<null | string>(null);
   const {
     register,
     handleSubmit,
     formState: { isValid },
   } = useForm<AuthForm>();
-  const onSubmit: SubmitHandler<AuthForm> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<AuthForm> = async (formData) => {
+    try {
+      setError(null);
+      setIsLoading(true);
+      const response = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
+      if (response.error) {
+        setError(response.error.message);
+      }
+      console.log({ response });
+
+      setIsLoading(false);
+    } catch (error) {
+      console.log("EEEORR", error);
+    }
+  };
+
+  const asssfa = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    console.log({ user });
+  };
 
   return (
     <Box
@@ -21,28 +49,43 @@ export default function Home() {
       overflow="hidden"
     >
       <Grid container>
-        <Box component={Grid} xs={8} display={{ xs: "none", md: "block" }}>
+        <Box component={Grid} item xs={8} display={{ xs: "none", md: "block" }}>
           <img
             src="https://img2.goodfon.com/wallpaper/nbig/e/97/shtanga-skamya-gym-fitness.jpg"
             className="home-cover"
           />
         </Box>
-        <Grid item xs={12} md={4} bgcolor="#151412">
-          <Box paddingX={4} pt={1} pb={20}>
-            <Box textAlign="center">
-              <img
-                src="https://cdn.dribbble.com/users/1090926/screenshots/14226582/media/762f9f80040cc43603db0f1146df6d0d.png?compress=1&resize=400x300"
-                width="100%"
-              />
+        <Box
+          component={Grid}
+          item
+          xs={12}
+          md={4}
+          bgcolor="#151412"
+          paddingX={4}
+          display="flex"
+          alignItems="center"
+          height={{ xs: "100vh", sm: "auto" }}
+        >
+          <Box width="100%">
+            <Box textAlign="center" mb={4}>
+              <img src="https://tauros.vercel.app/img/logo.png" width="100%" />
             </Box>
             <Box>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <Box mb={4}>
+                  <Button onClick={asssfa}>asdasdadas</Button>
                   <Typography variant="h4">Iniciar Sesión</Typography>
                   <Typography variant="subtitle1">
                     Al entrar tendras acceso a toda tu información
                   </Typography>
                 </Box>
+                {error && (
+                  <Box mb={4}>
+                    <Alert severity="error" variant="outlined">
+                      {error}
+                    </Alert>
+                  </Box>
+                )}
                 <Box mb={4}>
                   <TextField
                     label="Correo electronico o usuario"
@@ -55,7 +98,10 @@ export default function Home() {
                     label="Contraseña"
                     fullWidth
                     type="password"
-                    {...register("password", { required: true, minLength: 1 })}
+                    {...register("password", {
+                      required: true,
+                      minLength: 1,
+                    })}
                   />
                 </Box>
                 <Button
@@ -63,14 +109,14 @@ export default function Home() {
                   size="large"
                   type="submit"
                   fullWidth
-                  disabled={!isValid}
+                  disabled={!isValid || isLoading}
                 >
                   Iniciar sesión
                 </Button>
               </form>
             </Box>
           </Box>
-        </Grid>
+        </Box>
       </Grid>
     </Box>
   );
