@@ -53,13 +53,13 @@ export function SignInView() {
 
   return (
     <>
-      <Box>
+      <Box mx={-2}>
         <img
           src="https://img2.goodfon.com/wallpaper/nbig/e/97/shtanga-skamya-gym-fitness.jpg"
           className="home-cover"
         />
       </Box>
-      <Box padding={4}>
+      <Box my={4}>
         <Box width="100%">
           <Box>
             <form onSubmit={handleSubmit(onSubmit)}>

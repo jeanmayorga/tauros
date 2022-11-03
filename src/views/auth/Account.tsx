@@ -68,8 +68,9 @@ export function AccountView() {
       setError(error?.message);
     }
   };
+
   return (
-    <Box paddingY={4} paddingX={2}>
+    <Box paddingY={4}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box mb={4}>
           <Typography variant="h5">Tu cuenta</Typography>

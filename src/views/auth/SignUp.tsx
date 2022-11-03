@@ -72,7 +72,7 @@ export function SignUpView() {
           className="home-cover"
         />
       </Box>
-      <Box padding={4}>
+      <Box>
         <Box width="100%">
           <Box>
             <form onSubmit={handleSubmit(onSubmit)}>

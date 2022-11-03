@@ -1,7 +1,5 @@
 import {
   AppBar,
-  BottomNavigation,
-  BottomNavigationAction,
   Box,
   SwipeableDrawer,
   IconButton,
@@ -17,19 +15,13 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import {
-  AccountCircle,
-  Code,
-  ExitToApp,
-  Home,
-  Menu,
-} from "@mui/icons-material";
-import { useRouter } from "next/router";
+import { Code, ExitToApp, Menu } from "@mui/icons-material";
 import { useState } from "react";
-import { iOS } from "../utils";
+import { isIos } from "../utils";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useAppLoadingStore } from "../store";
 import { useToastStore } from "../store/toast";
+import { Navigation } from "./Navigation";
 
 interface Props {
   children: React.ReactNode;
@@ -37,18 +29,9 @@ interface Props {
 export function Layout({ children }: Props) {
   const supabase = useSupabaseClient();
   const session = useSession();
-  const router = useRouter();
   const { isAppLoading, setIsAppLoading } = useAppLoadingStore();
   const { isToastOpen, setIsToastOpen, toastText } = useToastStore();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-  function mainViewName() {
-    const path = router.asPath;
-    if (path.includes("auth")) {
-      return "/auth";
-    }
-    return path;
-  }
 
   async function handleLogout() {
     setIsAppLoading(true);
@@ -74,7 +57,11 @@ export function Layout({ children }: Props) {
         </Alert>
       </Snackbar>
       <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        sx={{
+          color: "#fff",
+          background: "#121212",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
         open={isAppLoading}
         onClick={() => setIsAppLoading(false)}
       >
@@ -85,8 +72,8 @@ export function Layout({ children }: Props) {
         open={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
         onOpen={() => setIsDrawerOpen(true)}
-        disableBackdropTransition={!iOS}
-        disableDiscovery={iOS}
+        disableBackdropTransition={!isIos}
+        disableDiscovery={isIos}
       >
         <Box width="250px">
           <List>
@@ -111,8 +98,8 @@ export function Layout({ children }: Props) {
           </List>
         </Box>
       </SwipeableDrawer>
-      <AppBar position="fixed">
-        <Toolbar variant="dense">
+      <AppBar position="fixed" color="secondary">
+        <Toolbar variant="regular">
           <IconButton
             edge="start"
             color="inherit"
@@ -127,25 +114,10 @@ export function Layout({ children }: Props) {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Box pt={6} pb={7}>
+      <Box pt={6} paddingX={2} pb={isIos ? 10 : 7}>
         {children}
       </Box>
-      <Box position="fixed" bottom="0" width="100%">
-        <BottomNavigation
-          showLabels
-          value={mainViewName()}
-          onChange={(event, viewName) => {
-            router.push(viewName);
-          }}
-        >
-          <BottomNavigationAction value="/" label="Inicio" icon={<Home />} />
-          <BottomNavigationAction
-            value="/auth"
-            label="Cuenta"
-            icon={<AccountCircle />}
-          />
-        </BottomNavigation>
-      </Box>
+      <Navigation />
     </Box>
   );
 }

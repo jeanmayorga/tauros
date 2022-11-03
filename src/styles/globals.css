@@ -8,3 +8,6 @@ body {
   object-fit: cover;
   vertical-align: top;
 }
+.MuiAppBar-root {
+  background-image: none;
+}
