@@ -1,12 +1,6 @@
-import { useSession } from "@supabase/auth-helpers-react";
-import { AccountView, SignInView } from "../../views";
+import { withPageAuth } from "@supabase/auth-helpers-nextjs";
+import { AccountView } from "../../views";
 
-export default function Auth() {
-  const session = useSession();
+export default AccountView;
 
-  if (session) {
-    return <AccountView />;
-  }
-
-  return <SignInView />;
-}
+export const getServerSideProps = withPageAuth({ redirectTo: "/auth/signin" });

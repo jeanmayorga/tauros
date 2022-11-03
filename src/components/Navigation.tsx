@@ -33,7 +33,6 @@ export function Navigation() {
       bottom="0"
       left="0"
       width="100%"
-      sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
       bgcolor={theme.palette.background.default}
     >
       <div style={{ marginBottom: isIos ? "24px" : 0 }}>

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { AppProps } from "next/app";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -28,9 +28,9 @@ export default function MyApp(props: MyAppProps) {
     pageProps,
     initialSession,
   } = props;
-  const [supabaseClient] = React.useState(() => createBrowserSupabaseClient());
+  const [supabaseClient] = useState(() => createBrowserSupabaseClient());
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleStart = () => setIsAppLoading(true);
     const handleComplete = () => setIsAppLoading(false);
 
@@ -42,6 +42,15 @@ export default function MyApp(props: MyAppProps) {
       router.events.off("routeChangeComplete", handleComplete);
     };
   });
+
+  // useEffect(() => {
+  //   supabaseClient.auth.onAuthStateChange((event, session) => {
+  //     setIsAppLoading(false);
+  //     console.log({ event });
+  //     if (event == "SIGNED_IN") {
+  //     }
+  //   });
+  // });
 
   return (
     <CacheProvider value={emotionCache}>

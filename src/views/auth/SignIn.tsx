@@ -57,6 +57,7 @@ export function SignInView() {
         <img
           src="https://img2.goodfon.com/wallpaper/nbig/e/97/shtanga-skamya-gym-fitness.jpg"
           className="home-cover"
+          width="100%"
         />
       </Box>
       <Box my={4}>
@@ -106,17 +107,6 @@ export function SignInView() {
                 </Button>
               </Box>
             </form>
-            <Box mb={1} textAlign="right">
-              <Button
-                LinkComponent={NextLink}
-                href="/auth/forgot"
-                size="large"
-                fullWidth
-                variant="text"
-              >
-                Recuperar contraseña
-              </Button>
-            </Box>
             <Divider />
             <Box mt={1}>
               <Button
