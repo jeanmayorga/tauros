@@ -6,26 +6,60 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import { theme, createEmotionCache } from "../config";
 import "../styles/globals.css";
+import { Layout } from "../components";
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { SessionContextProvider, Session } from "@supabase/auth-helpers-react";
+import { useRouter } from "next/router";
+import { useAppLoadingStore } from "../store";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
+  initialSession: Session;
 }
 
 export default function MyApp(props: MyAppProps) {
-  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+  const router = useRouter();
+  const { setIsAppLoading } = useAppLoadingStore();
+  const {
+    Component,
+    emotionCache = clientSideEmotionCache,
+    pageProps,
+    initialSession,
+  } = props;
+  const [supabaseClient] = React.useState(() => createBrowserSupabaseClient());
+
+  React.useEffect(() => {
+    const handleStart = () => setIsAppLoading(true);
+    const handleComplete = () => setIsAppLoading(false);
+
+    router.events.on("routeChangeStart", handleStart);
+    router.events.on("routeChangeComplete", handleComplete);
+
+    return () => {
+      router.events.off("routeChangeStart", handleStart);
+      router.events.off("routeChangeComplete", handleComplete);
+    };
+  });
+
   return (
     <CacheProvider value={emotionCache}>
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-      <ThemeProvider theme={theme}>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-        <CssBaseline />
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <SessionContextProvider
+        supabaseClient={supabaseClient}
+        initialSession={initialSession}
+      >
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ThemeProvider>
+      </SessionContextProvider>
     </CacheProvider>
   );
 }

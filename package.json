@@ -15,11 +15,14 @@
     "@emotion/styled": "latest",
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
+    "@supabase/auth-helpers-nextjs": "^0.4.4",
+    "@supabase/auth-helpers-react": "^0.3.1",
     "@supabase/supabase-js": "^2.0.5",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "react-hook-form": "^7.39.0"
+    "react-hook-form": "^7.39.0",
+    "zustand": "^4.1.4"
   },
   "devDependencies": {
     "@types/node": "latest",
