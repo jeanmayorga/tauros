@@ -1,14 +1,21 @@
-import { AccountCircle, Home } from "@mui/icons-material";
+import {
+  AccountCircle,
+  Home,
+  FitnessCenter,
+  EmojiPeople,
+} from "@mui/icons-material";
 import {
   Box,
   BottomNavigation,
   BottomNavigationAction,
   useTheme,
 } from "@mui/material";
+import { useSession } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 import { isIos } from "../utils";
 
 export function Navigation() {
+  const session = useSession();
   const theme = useTheme();
   const router = useRouter();
 
@@ -39,6 +46,20 @@ export function Navigation() {
           }}
         >
           <BottomNavigationAction value="/" label="Inicio" icon={<Home />} />
+          {session && (
+            <BottomNavigationAction
+              value="/health"
+              label="Salud"
+              icon={<EmojiPeople />}
+            />
+          )}
+          {session && (
+            <BottomNavigationAction
+              value="/routines"
+              label="Rutina"
+              icon={<FitnessCenter />}
+            />
+          )}
           <BottomNavigationAction
             value="/auth"
             label="Cuenta"

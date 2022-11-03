@@ -22,6 +22,7 @@ import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useAppLoadingStore } from "../store";
 import { useToastStore } from "../store/toast";
 import { Navigation } from "./Navigation";
+import pkg from "../../package.json";
 
 interface Props {
   children: React.ReactNode;
@@ -96,6 +97,15 @@ export function Layout({ children }: Props) {
               </ListItem>
             )}
           </List>
+          <Box mt={4} textAlign="center">
+            <div>
+              <Typography variant="caption">An app from:</Typography>
+            </div>
+            <Typography variant="caption">Jean Paul Mayorga</Typography>
+            <div>
+              <Typography variant="caption">v {pkg.version}</Typography>
+            </div>
+          </Box>
         </Box>
       </SwipeableDrawer>
       <AppBar position="fixed" color="secondary">
@@ -114,7 +124,7 @@ export function Layout({ children }: Props) {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Box pt={6} paddingX={2} pb={isIos ? 10 : 7}>
+      <Box pt={7} paddingX={2} pb={isIos ? 10 : 7}>
         {children}
       </Box>
       <Navigation />

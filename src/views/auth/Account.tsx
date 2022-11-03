@@ -70,7 +70,7 @@ export function AccountView() {
   };
 
   return (
-    <Box paddingY={4}>
+    <Box paddingY={2}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box mb={4}>
           <Typography variant="h5">Tu cuenta</Typography>

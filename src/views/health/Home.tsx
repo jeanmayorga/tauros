@@ -1,9 +1,9 @@
 import { Box, Typography } from "@mui/material";
 
-export default function Home() {
+export function HomeHealthView() {
   return (
     <Box paddingY={2}>
-      <Typography variant="h5">Home</Typography>
+      <Typography variant="h5">Salud</Typography>
     </Box>
   );
 }
