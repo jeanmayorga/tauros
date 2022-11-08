@@ -43,7 +43,7 @@ export function SignInView() {
         return;
       }
 
-      router.push("/");
+      await router.push("/");
 
       setIsAppLoading(false);
     } catch (error: any) {

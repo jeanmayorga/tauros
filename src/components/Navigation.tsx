@@ -12,12 +12,13 @@ import {
 } from "@mui/material";
 import { useSession } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
-import { isIos } from "../utils";
+import { useDevice } from "../hooks";
 
 export function Navigation() {
   const session = useSession();
   const theme = useTheme();
   const router = useRouter();
+  const { isIos } = useDevice();
 
   function mainViewName() {
     const path = router.asPath;
@@ -27,6 +28,8 @@ export function Navigation() {
     return path;
   }
 
+  console.log({ isIos });
+
   return (
     <Box
       position="fixed"
@@ -35,7 +38,7 @@ export function Navigation() {
       width="100%"
       bgcolor={theme.palette.background.default}
     >
-      <div style={{ marginBottom: isIos ? "24px" : 0 }}>
+      <Box marginBottom="24px">
         <BottomNavigation
           component={Box}
           showLabels
@@ -65,7 +68,7 @@ export function Navigation() {
             icon={<AccountCircle />}
           />
         </BottomNavigation>
-      </div>
+      </Box>
     </Box>
   );
 }
