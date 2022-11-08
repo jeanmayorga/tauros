@@ -46,7 +46,7 @@ export function Layout({ children }: Props) {
       </Backdrop>
 
       <Drawer />
-      <Box pt={7} paddingX={2} pb={isIos ? 10 : 7}>
+      <Box pt={7} paddingX={2} pb={10}>
         {children}
       </Box>
       <Navigation />
