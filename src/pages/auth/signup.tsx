@@ -1,2 +1,2 @@
-import { SignUpView } from "../../views";
-export default SignUpView;
+import { SignUpPage } from "../../modules/auth";
+export default SignUpPage;

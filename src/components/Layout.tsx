@@ -38,6 +38,7 @@ export function Layout({ children }: Props) {
         sx={{
           color: "#fff",
           background: "#121212",
+          zIndex: "999",
         }}
         open={isAppLoading}
         onClick={() => setIsAppLoading(false)}
@@ -46,7 +47,7 @@ export function Layout({ children }: Props) {
       </Backdrop>
 
       <Drawer />
-      <Box pt={7} paddingX={2} pb={10}>
+      <Box pt={7} pb={10}>
         {children}
       </Box>
       <Navigation />

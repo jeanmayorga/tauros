@@ -1,6 +1,6 @@
 import { withPageAuth } from "@supabase/auth-helpers-nextjs";
-import { AccountView } from "../../views";
+import { AccountPage } from "../../modules/account";
 
-export default AccountView;
+export default AccountPage;
 
 export const getServerSideProps = withPageAuth({ redirectTo: "/auth/signin" });

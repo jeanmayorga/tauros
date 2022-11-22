@@ -1,2 +1,2 @@
-import { SignInView } from "../../views";
-export default SignInView;
+import { SignInPage } from "../../modules/auth";
+export default SignInPage;

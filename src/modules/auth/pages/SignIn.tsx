@@ -11,14 +11,15 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useAppLoadingStore } from "../../store";
+import { AppBar } from "../../../components";
+import { useAppLoadingStore } from "../../../store";
 
 type AuthForm = {
   email: string;
   password: string;
 };
 
-export function SignInView() {
+export function SignInPage() {
   const router = useRouter();
   const supabase = useSupabaseClient();
   const { isAppLoading, setIsAppLoading } = useAppLoadingStore();
@@ -53,14 +54,15 @@ export function SignInView() {
 
   return (
     <>
-      <Box mx={-2}>
+      <AppBar />
+      <Box>
         <img
-          src="https://img2.goodfon.com/wallpaper/nbig/e/97/shtanga-skamya-gym-fitness.jpg"
+          src="https://emilypost.com/client_media/images/blogs/everyday-gym.jpg"
           className="home-cover"
           width="100%"
         />
       </Box>
-      <Box my={4}>
+      <Box my={4} mx={2}>
         <Box width="100%">
           <Box>
             <form onSubmit={handleSubmit(onSubmit)}>
