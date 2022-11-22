@@ -3,7 +3,7 @@ import { GetServerSidePropsContext } from "next";
 import { serialize } from "cookie";
 import { Profile } from "../modules/profile";
 
-export interface WithAuth {
+export interface WithAuthProps {
   profile: Profile;
 }
 export const withAuth = async (ctx: GetServerSidePropsContext) => {
@@ -11,9 +11,11 @@ export const withAuth = async (ctx: GetServerSidePropsContext) => {
   const supabaseAuthToken = ctx.req.cookies?.["supabase-auth-token"];
 
   if (profileCached && supabaseAuthToken) {
+    console.log("auth get info from cache");
     return {
       props: {
         profile: JSON.parse(profileCached),
+        session: supabaseAuthToken,
       },
     };
   }
@@ -50,6 +52,7 @@ export const withAuth = async (ctx: GetServerSidePropsContext) => {
   return {
     props: {
       profile,
+      session: session.access_token,
     },
   };
 };

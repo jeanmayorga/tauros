@@ -1,39 +1,26 @@
-import {
-  Box,
-  Backdrop,
-  CircularProgress,
-  Snackbar,
-  Alert,
-} from "@mui/material";
-import { isIos } from "../utils";
+import { Box, Backdrop, CircularProgress } from "@mui/material";
 import { useAppLoadingStore } from "../store";
-import { useToastStore } from "../store/toast";
 import { Navigation } from "./Navigation";
 import { Drawer } from "./Drawer";
+import Head from "next/head";
+import { Toast } from "./Toast";
+import { Profile } from "../modules/profile";
 
 interface Props {
   children: React.ReactNode;
+  profile?: Profile;
+  session?: string;
 }
-export function Layout({ children }: Props) {
+export function Layout({ children, profile, session }: Props) {
   const { isAppLoading, setIsAppLoading } = useAppLoadingStore();
-  const { isToastOpen, setIsToastOpen, toastText } = useToastStore();
+
+  console.log({ profile, session });
 
   return (
     <Box>
-      <Snackbar
-        autoHideDuration={3000}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={isToastOpen}
-        onClose={() => setIsToastOpen(false)}
-      >
-        <Alert
-          onClose={() => setIsToastOpen(false)}
-          severity="success"
-          sx={{ width: "100%" }}
-        >
-          {toastText}
-        </Alert>
-      </Snackbar>
+      <Head>
+        <title>Tauros</title>
+      </Head>
       <Backdrop
         sx={{
           color: "#fff",
@@ -45,12 +32,12 @@ export function Layout({ children }: Props) {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-
+      <Toast />
       <Drawer />
       <Box pt={7} pb={10}>
         {children}
       </Box>
-      <Navigation />
+      {session && profile && <Navigation profile={profile} />}
     </Box>
   );
 }

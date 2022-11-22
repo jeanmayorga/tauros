@@ -2,7 +2,7 @@ import {
   AccountCircle,
   Home,
   FitnessCenter,
-  EmojiPeople,
+  AdminPanelSettings,
 } from "@mui/icons-material";
 import {
   Box,
@@ -10,17 +10,17 @@ import {
   BottomNavigationAction,
   useTheme,
 } from "@mui/material";
-import { useSession } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
+import { Profile } from "../modules/profile";
 
-export function Navigation() {
+interface Props {
+  profile: Profile;
+}
+export function Navigation({ profile }: Props) {
   const theme = useTheme();
   const router = useRouter();
-  const session = useSession();
 
   const mainViewName = router.asPath.includes("auth") ? "/auth" : router.asPath;
-
-  if (!session) return null;
 
   return (
     <Box
@@ -29,6 +29,7 @@ export function Navigation() {
       left="0"
       width="100%"
       bgcolor={theme.palette.background.default}
+      zIndex="9999"
     >
       <Box marginBottom="24px">
         <BottomNavigation
@@ -40,16 +41,25 @@ export function Navigation() {
           }}
         >
           <BottomNavigationAction value="/" label="Inicio" icon={<Home />} />
+          {profile?.roles?.includes("gym") && (
+            <BottomNavigationAction
+              value="/training"
+              label="Entrenamiento"
+              icon={<FitnessCenter />}
+            />
+          )}
           <BottomNavigationAction
-            value="/training"
-            label="Entrenamiento"
-            icon={<FitnessCenter />}
-          />
-          <BottomNavigationAction
-            value="/auth"
+            value="/account"
             label="Cuenta"
             icon={<AccountCircle />}
           />
+          {profile?.roles?.includes("admin") && (
+            <BottomNavigationAction
+              value="/admin"
+              label="Administrar"
+              icon={<AdminPanelSettings />}
+            />
+          )}
         </BottomNavigation>
       </Box>
     </Box>

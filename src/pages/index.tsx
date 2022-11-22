@@ -1,7 +1,7 @@
-import { WithAuth, withAuth } from "../hooks/withAuth";
+import { WithAuthProps, withAuth } from "../hooks";
 import { HomePage } from "../modules/home";
 
-export default function Page(props: WithAuth) {
+export default function Page(props: WithAuthProps) {
   return <HomePage {...props} />;
 }
 

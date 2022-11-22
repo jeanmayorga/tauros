@@ -1,4 +1,4 @@
-import { withAuth } from "../../hooks/withAuth";
+import { withAuth } from "../../hooks";
 import { CreateTrainingPage } from "../../modules/training";
 
 export default function Page() {

@@ -7,7 +7,7 @@ export function TrainingPage() {
   const router = useRouter();
   return (
     <Box p={2}>
-      <AppBar />
+      <AppBar title="Entrenamientos" />
       <Box mb={2}>
         <Typography variant="h5">Registro de entrenamientos</Typography>
       </Box>
@@ -23,7 +23,7 @@ export function TrainingPage() {
       </Box>
       <Paper elevation={2} component={Box} display="flex" p={1} mb={2}>
         <Box
-          bgcolor="red"
+          bgcolor="#ef5350"
           p={1}
           borderRadius={1}
           mr={2}

@@ -1,8 +1,7 @@
-import { withAuth } from "../../hooks/withAuth";
+import { withAuth, WithAuthProps } from "../../hooks";
 import { InformationPage } from "../../modules/account";
-import { Profile } from "../../modules/profile";
 
-export default function Page(props: { profile: Profile }) {
+export default function Page(props: WithAuthProps) {
   return <InformationPage {...props} />;
 }
 export const getServerSideProps = withAuth;

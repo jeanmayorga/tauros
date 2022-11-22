@@ -111,7 +111,7 @@ export function InformationPage({ profile }: { profile: Profile }) {
               {...register("phone", { required: true, minLength: 1 })}
             />
           </Box>
-          <Box mb={4}>
+          <Box>
             <Button
               variant="contained"
               size="large"

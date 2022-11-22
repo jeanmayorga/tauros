@@ -1,4 +1,4 @@
-import { withAuth } from "../../hooks/withAuth";
+import { withAuth } from "../../hooks";
 import { PasswordPage } from "../../modules/account";
 
 export default function Page() {
