@@ -1,8 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import { AppBar } from "../../../components";
-import { WithAuth } from "../../../hooks/withAuth";
+import { WithAuthProps } from "../../../hooks/withAuth";
 
-export function HomePage({ profile }: WithAuth) {
+export function HomePage({ profile }: WithAuthProps) {
   return (
     <Box p={2}>
       <AppBar />
