@@ -9,34 +9,32 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   TextField,
   IconButton,
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { useState } from "react";
-import { muscles } from "../../../data";
-import { useExercises } from "../../exersices";
-import { useMuscles } from "../../muscles";
+import { Database } from "../../../types";
+import { AddExercise } from "./AddExercise";
+import { ExcersiceSelected } from "../types";
+
+type Muscle = Database["public"]["Tables"]["muscles"]["Row"];
 
 interface Props {
-  muscleId: number;
+  muscle: Muscle;
   onDelete: (muscleId: number) => void;
 }
 
-interface Excersice {
-  id: string;
-  name: string;
-  series: number;
-  repetitions: number;
-}
-
-export function ExerciseMuscle({ muscleId, onDelete }: Props) {
-  const { data: muscles } = useMuscles();
-  const muscle = muscles?.find((muscle) => muscle.id === muscleId);
-  const [exercises, setExercises] = useState<Excersice[]>([]);
+export function ExerciseMuscle({ muscle, onDelete }: Props) {
+  const [exercisesSelected, setExercisesSelected] = useState<
+    ExcersiceSelected[]
+  >([]);
   const [isCreateExerciseOpen, setIsCreateExerciseOpen] = useState(false);
+
+  const handleCreateExercise = (excersiceSelected: ExcersiceSelected) => {
+    setExercisesSelected([...exercisesSelected, excersiceSelected]);
+  };
 
   if (!muscle) return null;
 
@@ -49,13 +47,28 @@ export function ExerciseMuscle({ muscleId, onDelete }: Props) {
           justifyContent="space-between"
           alignItems="center"
         >
-          <Typography variant="h6">{muscle?.name}</Typography>
-          <IconButton aria-label="close" onClick={() => onDelete(muscleId)}>
+          <div>
+            <Typography variant="h6">{muscle.name}</Typography>
+            <Chip
+              label={`4 Series`}
+              variant="outlined"
+              color="secondary"
+              size="small"
+              style={{ marginRight: "4px" }}
+            />
+            <Chip
+              label={`10 Repeticiones`}
+              variant="outlined"
+              color="secondary"
+              size="small"
+            />
+          </div>
+          <IconButton aria-label="close" onClick={() => onDelete(muscle.id)}>
             <Close />
           </IconButton>
         </Box>
         <Divider />
-        {exercises.length === 0 && (
+        {exercisesSelected.length === 0 && (
           <Box
             padding={2}
             display="flex"
@@ -67,7 +80,7 @@ export function ExerciseMuscle({ muscleId, onDelete }: Props) {
             </Typography>
           </Box>
         )}
-        {exercises.map((exercise) => (
+        {exercisesSelected.map((exerciseSelected) => (
           <Box
             key={1}
             paddingX={2}
@@ -76,17 +89,17 @@ export function ExerciseMuscle({ muscleId, onDelete }: Props) {
             display="flex"
             justifyContent="space-between"
           >
-            <Typography variant="subtitle1">{exercise.name}</Typography>
+            <Typography variant="subtitle1">{exerciseSelected.name}</Typography>
             <div>
               <Chip
-                label={`${exercise.series} Series`}
+                label={`${exerciseSelected.series} Series`}
                 variant="outlined"
                 color="secondary"
                 size="small"
                 style={{ marginRight: "4px" }}
               />
               <Chip
-                label={`${exercise.repetitions} Repeticiones`}
+                label={`${exerciseSelected.repetitions} Repeticiones`}
                 variant="outlined"
                 color="secondary"
                 size="small"
@@ -94,25 +107,13 @@ export function ExerciseMuscle({ muscleId, onDelete }: Props) {
             </div>
           </Box>
         ))}
-        <Dialog
-          open={isCreateExerciseOpen}
-          onClose={() => setIsCreateExerciseOpen(false)}
-        >
-          <DialogTitle>Agregar ejercicio</DialogTitle>
-          <DialogContent>
-            <Box mb={2}>
-              <TextField fullWidth label="Segundos de descanso" type="number" />
-            </Box>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setIsCreateExerciseOpen(false)}>
-              Cancelar
-            </Button>
-            <Button onClick={() => setIsCreateExerciseOpen(false)}>
-              Agregar
-            </Button>
-          </DialogActions>
-        </Dialog>
+
+        <AddExercise
+          muscle={muscle}
+          isOpen={isCreateExerciseOpen}
+          setIsOpen={setIsCreateExerciseOpen}
+          onSave={handleCreateExercise}
+        />
 
         <Divider />
         <Box>

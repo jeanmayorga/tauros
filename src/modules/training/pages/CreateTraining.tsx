@@ -41,10 +41,22 @@ export function CreateTrainingPage() {
       <Box mb={2}>
         <Typography variant="h6">Hoy</Typography>
       </Box>
+      {musclesSelected.length === 0 && (
+        <Box
+          padding={2}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Typography variant="body2">
+            No has agregado ningun musculo para trabajar todavia.
+          </Typography>
+        </Box>
+      )}
 
       {musclesSelected.map((muscle) => (
         <ExerciseMuscle
-          muscleId={muscle.id}
+          muscle={muscle}
           key={muscle.id}
           onDelete={removeFromMuscles}
         />
@@ -55,6 +67,7 @@ export function CreateTrainingPage() {
           <Dialog
             onClose={() => setIsAddMuscleOpen(false)}
             open={isAddMuscleOpen}
+            sx={{ zIndex: 10000 }}
           >
             <DialogTitle>Musculos</DialogTitle>
             <List sx={{ pt: 0 }}>
