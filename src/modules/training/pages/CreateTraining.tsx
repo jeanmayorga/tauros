@@ -1,145 +1,89 @@
+import { Add } from "@mui/icons-material";
 import {
   Box,
+  Typography,
   Button,
   Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
   DialogTitle,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
 } from "@mui/material";
 import { useState } from "react";
 import { AppBar } from "../../../components";
+import { Database } from "../../../types/supabase";
+import { useMuscles } from "../../muscles";
+import { ExerciseMuscle } from "../components/ExerciseMuscle";
 
-const muscles = [
-  {
-    value: "trapecio",
-    label: "Trapecio",
-  },
-  {
-    value: "deltoide",
-    label: "Deltoide",
-  },
-  {
-    value: "triceps",
-    label: "Triceps",
-  },
-  {
-    value: "biceps",
-    label: "Biceps",
-  },
-  {
-    value: "antebrazo",
-    label: "Antebrazo",
-  },
-  {
-    value: "dorsales",
-    label: "Dorsales",
-  },
-  {
-    value: "pectorales",
-    label: "Pectorales",
-  },
-  {
-    value: "abdominales",
-    label: "Abdominales",
-  },
-  {
-    value: "oblicuos",
-    label: "Oblicuos",
-  },
-  {
-    value: "gluteos",
-    label: "Gluteos",
-  },
-  {
-    value: "aductores",
-    label: "Aductores",
-  },
-  {
-    value: "cuádriceps",
-    label: "Cuadriceps",
-  },
-  {
-    value: "isquiotibiales",
-    label: "Isquiotibiales",
-  },
-  {
-    value: "pantorillas",
-    label: "Pantorillas",
-  },
-];
+type Muscle = Database["public"]["Tables"]["muscles"]["Row"];
 
 export function CreateTrainingPage() {
-  const [muscle, setMuscle] = useState("");
-  const [isOpenCreateMuscle, setIsOpenCreateMuscle] = useState(true);
+  const { data: muscles } = useMuscles();
+  const [isAddMuscleOpen, setIsAddMuscleOpen] = useState(false);
+  const [musclesSelected, setMusclesSelected] = useState<Muscle[]>([]);
+
+  const addToMuscles = (muscle: Muscle) => {
+    setMusclesSelected([...musclesSelected, muscle]);
+    setIsAddMuscleOpen(false);
+  };
+
+  const removeFromMuscles = (muscleId: number) => {
+    const newMusclesSelected = musclesSelected.filter(
+      (muscleSelected) => muscleSelected.id !== muscleId
+    );
+    setMusclesSelected(newMusclesSelected);
+  };
+
   return (
     <Box p={2}>
       <AppBar title="Crear un entrenamiento" withBack />
       <Box mb={2}>
         <Typography variant="h6">Hoy</Typography>
       </Box>
-      <Dialog
-        open={isOpenCreateMuscle}
-        onClose={() => setIsOpenCreateMuscle(false)}
-      >
-        <DialogTitle>Musculo</DialogTitle>
-        <DialogContent>
-          <Box my={2}>
-            <Box mb={2}>
-              <FormControl fullWidth>
-                <InputLabel id="musculo-label">Musculo</InputLabel>
-                <Select
-                  value={muscle}
-                  onChange={(e) => setMuscle(e.target.value)}
-                  label="Musculo"
-                  labelId="musculo-label"
-                  id="musculo"
-                >
-                  {muscles.map((muscle) => (
-                    <MenuItem key={muscle.value} value={muscle.value}>
-                      {muscle.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-            <Box mb={2}>
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <TextField
-                    label="Series"
-                    variant="outlined"
-                    type="number"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    label="Repeticiones"
-                    variant="outlined"
-                    type="number"
-                    fullWidth
-                  />
-                </Grid>
-              </Grid>
-            </Box>
-            <Box mb={2}>
-              <TextField fullWidth label="Segundos de descanso" type="number" />
-            </Box>
+
+      {musclesSelected.map((muscle) => (
+        <ExerciseMuscle
+          muscleId={muscle.id}
+          key={muscle.id}
+          onDelete={removeFromMuscles}
+        />
+      ))}
+
+      {muscles && (
+        <>
+          <Dialog
+            onClose={() => setIsAddMuscleOpen(false)}
+            open={isAddMuscleOpen}
+          >
+            <DialogTitle>Musculos</DialogTitle>
+            <List sx={{ pt: 0 }}>
+              {muscles.map((muscle) => (
+                <ListItem disableGutters key={muscle.id}>
+                  <ListItemButton
+                    onClick={() => addToMuscles(muscle)}
+                    key={muscle.id}
+                  >
+                    <ListItemText primary={muscle.name} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </Dialog>
+
+          <Box mb={2} mt={4}>
+            <Button
+              startIcon={<Add />}
+              fullWidth
+              variant="contained"
+              color="secondary"
+              onClick={() => setIsAddMuscleOpen(true)}
+            >
+              Agregar musculo
+            </Button>
           </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setIsOpenCreateMuscle(false)}>Cancelar</Button>
-          <Button onClick={() => setIsOpenCreateMuscle(false)}>Agregar</Button>
-        </DialogActions>
-      </Dialog>
+        </>
+      )}
     </Box>
   );
 }
